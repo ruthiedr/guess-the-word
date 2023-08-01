@@ -80,13 +80,54 @@ const validateInput = function(input) {
     
 };
 
+// Change letteres to uppercase, sends a message if letter has been guessed twice, adds letter to the array otherwise
 const makeGuess = function(inputValue) {
-    //guess = guess.toUpperCase();
+    inputValue = inputValue.toUpperCase();
     if (guessedLetters.includes(inputValue)) {
         message.innerText = "Oops, you've already guessed that. Try again!";
     } else {
         guessedLetters.push(inputValue);
         console.log(guessedLetters);
+        showGuessedLetters();
+        updateWord(guessedLetters);
     }
 };
+
+
+// Show the list of guessed letters
+const showGuessedLetters = function() {
+    guessedLettersElement.innerHTML = "";
+    for (const letter of guessedLetters) {
+    const li = document.createElement("li");
+    li.innerText = letter;
+    guessedLettersElement.append(li);
+    }
+};
+
+//Update the word in progress
+const updateWord = function (guessedLetters) {
+    const wordUpper = word.toUpperCase();
+    const wordArray = wordUpper.split("");
+    const updatedArray = [];
+    for (const letter of wordArray) {
+    if (guessedLetters.includes(letter)) {
+        updatedArray.push(letter.toUpperCase());
+        
+    } else {
+        updatedArray.push("●");
+    }
+}
+wordInProgress.innerText = updatedArray.join("");
+winnerCheck();
+
+};
+
+
+const winnerCheck = function() {
+    if (word.toUpperCase() === wordInProgress.innerText) {
+        message.classList.add("win");
+        message.innerHTML = `<p class="highlight">You guessed the correct word! Congrats!</p>`;
+    };
+};
+
 
